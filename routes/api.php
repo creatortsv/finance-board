@@ -1,6 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\LabelController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function (): void {
+    
+    Route::apiResource('users', UserController::class)->only(['show', 'update', 'destroy']);
+    Route::apiResource('expenses', ExpenseController::class);
+    Route::apiResource('activities', ActivityController::class);
+    Route::apiResource('labels', LabelController::class);
+
 });

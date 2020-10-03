@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Creatortsv\EloquentPipelinesModifier\WithModifier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * class Models\User
+ */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory,
+        Notifiable,
+        SoftDeletes,
+        WithModifier;
 
     /**
      * The attributes that are mass assignable.
@@ -38,6 +46,25 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expense::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class, 'owner_id');
+    }
 }
