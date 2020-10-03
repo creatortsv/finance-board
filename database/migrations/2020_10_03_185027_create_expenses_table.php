@@ -16,11 +16,13 @@ class CreateExpensesTable extends Migration
         Schema::create('expenses', function (Blueprint $table): void {
             $table->increments('id');
             $table->string('comment')->nullable();
+            $table->float('quantity');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('activity_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
 
+            $table->index('quantity');
             $table->index(['user_id', 'activity_id'], 'user_expenses');
             $table->index('created_at');
             $table->index('updated_at');
