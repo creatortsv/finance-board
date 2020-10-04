@@ -16,8 +16,8 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
-            $table->dateTime('start');
-            $table->dateTime('finish');
+            $table->dateTime('start')->nullable();
+            $table->dateTime('finish')->nullable();
             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

@@ -19,11 +19,13 @@ class CreateExpensesTable extends Migration
             $table->float('quantity');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('activity_id')->nullable()->constrained()->onDelete('cascade');
+            $table->dateTime('date');
             $table->timestamps();
             $table->softDeletes();
 
             $table->index('quantity');
             $table->index(['user_id', 'activity_id'], 'user_expenses');
+            $table->index('date');
             $table->index('created_at');
             $table->index('updated_at');
         });

@@ -23,12 +23,14 @@ class Expense extends Model
         'quantity',
         'user_id',
         'activity_id',
+        'date',
     ];
 
     /**
      * @var array
      */
     protected $casts = [
+        'date' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',

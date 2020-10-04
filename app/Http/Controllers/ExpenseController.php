@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ExpenseController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request): AnonymousResourceCollection
     {
-        //
+        return ExpenseResource::collection(User::modifyTo($request
+            ->user('api')
+            ->expenses())
+            ->get());
     }
 
     /**
