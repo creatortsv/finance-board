@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "168f1527ad34abc3792f19f38e7a50b6",
+    "content-hash": "6d8de10c157008e4220c873c0a10e385",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -112,16 +112,16 @@
         },
         {
             "name": "creatortsv/eloquent-pipelines-modifier",
-            "version": "1.1.3",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/creatortsv/eloquent-pipelines-modifier.git",
-                "reference": "714bc78ec07d2a6dc92b8d952f6f25d40f06dea2"
+                "reference": "13fb52e63a87a5d4cfb4a4633a33039a650b4430"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creatortsv/eloquent-pipelines-modifier/zipball/714bc78ec07d2a6dc92b8d952f6f25d40f06dea2",
-                "reference": "714bc78ec07d2a6dc92b8d952f6f25d40f06dea2",
+                "url": "https://api.github.com/repos/creatortsv/eloquent-pipelines-modifier/zipball/13fb52e63a87a5d4cfb4a4633a33039a650b4430",
+                "reference": "13fb52e63a87a5d4cfb4a4633a33039a650b4430",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +148,7 @@
                     "email": "creatortsv@yandex.ru"
                 }
             ],
-            "time": "2020-10-04T00:44:40+00:00"
+            "time": "2020-10-04T15:48:35+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

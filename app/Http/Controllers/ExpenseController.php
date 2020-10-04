@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ExpenseRequest;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
-use App\Models\User;
+use App\Repositories\RepositoryInterface;
+use Creatortsv\EloquentPipelinesModifier\ModifierFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class ExpenseController extends Controller
+class ExpenseController extends RepositoryController
 {
+    public function __construct(RepositoryInterface $repository)
+    {
+        parent::__construct($repository);
+
+        $this->middleware('can:update,expense')->only('update');
+        $this->middleware('can:delete,expense')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +28,7 @@ class ExpenseController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        return ExpenseResource::collection(User::modifyTo($request
+        return ExpenseResource::collection(ModifierFactory::modifyTo($request
             ->user('api')
             ->expenses())
             ->get());
@@ -26,35 +37,39 @@ class ExpenseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  ExpenseRequest  $request
+     * @return ExpenseResource
      */
-    public function store(Request $request)
+    public function store(ExpenseRequest $request): ExpenseResource
     {
-        //
+        return new ExpenseResource($this
+            ->repository
+            ->save($request));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Expense  $expense
-     * @return \Illuminate\Http\Response
+     * @param  Expense  $expense
+     * @return ExpenseResource
      */
-    public function show(Expense $expense)
+    public function show(Expense $expense): ExpenseResource
     {
-        //
+        return new ExpenseResource(Expense::modify()->find($expense->id));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Expense  $expense
-     * @return \Illuminate\Http\Response
+     * @param  ExpenseRequest  $request
+     * @param  Expense  $expense
+     * @return ExpenseResource
      */
-    public function update(Request $request, Expense $expense)
+    public function update(ExpenseRequest $request, Expense $expense): ExpenseResource
     {
-        //
+        return new ExpenseResource($this
+            ->repository
+            ->save($request, $expense));
     }
 
     /**
@@ -63,8 +78,9 @@ class ExpenseController extends Controller
      * @param  \App\Models\Expense  $expense
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Expense $expense)
+    public function destroy(Expense $expense): JsonResponse
     {
-        //
+        $expense->delete();
+        return response()->json(['message' => 'Expense deleted']);
     }
 }

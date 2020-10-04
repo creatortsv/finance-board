@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\ExpenseController;
+use App\Repositories\ExpenseRepository;
+use App\Repositories\RepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,9 +14,12 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        //
+        $this->app
+            ->when(ExpenseController::class)
+            ->needs(RepositoryInterface::class)
+            ->give(ExpenseRepository::class);
     }
 
     /**
@@ -21,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }
