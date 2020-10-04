@@ -145,7 +145,7 @@ class ExpenseTest extends TestCase
         /** Delete with different user */
             ->actingAs($some, 'api')
             ->json(...$args)
-            ->assertStatus(Response::HTTP_FORBIDDEN);
+            ->assertStatus(Response::HTTP_NOT_FOUND);
 
         $this
         /** Delete by author */

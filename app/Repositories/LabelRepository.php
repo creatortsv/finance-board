@@ -2,15 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ExpenseRequest;
-use App\Models\Expense;
+use App\Models\Label;
 use Creatortsv\EloquentPipelinesModifier\ModifierFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 
-class ExpenseRepository extends RepositoryAbstract implements RepositoryInterface
+class LabelRepository extends RepositoryAbstract implements RepositoryInterface
 {
     /**
      * @return Builder
@@ -19,31 +17,28 @@ class ExpenseRepository extends RepositoryAbstract implements RepositoryInterfac
     {
         return $this
             ->user()
-            ->expenses()
+            ->labels()
             ->getQuery();
     }
 
     /**
-     * @param ExpenseRequest $request
-     * @param Expense $model
-     * @return Expense
+     * @param LabelRequest $request
+     * @param Label $model
+     * @return Label
      */
     public function save(FormRequest $request, Model $model = null): Model
     {
-        $data = $request->validated();
-        $model = $model ?? new Expense;
+        $model = $model ?? new Label;
         if ($model->exists) {
             $model = ModifierFactory::modifyTo($this
                 ->builder())
                 ->findOrFail($model->id);
         } else {
-            $data = array_merge($request->validated(), ['user_id' => $this->user()->id]);
+            $data = array_merge($request->validated(), ['owner_id' => $this->user()->id]);
         }
 
-        $model->labels()->sync($data['labels']);
-        $model->fill(Arr::except($data, 'labels'));
+        $model->fill($data);
         $model->save();
-
         return $model;
     }
 }
