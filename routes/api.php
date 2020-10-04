@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->group(function (): void {
     
-    Route::apiResource('users', UserController::class)->only(['show', 'update', 'destroy']);
     Route::apiResource('expenses', ExpenseController::class);
     Route::apiResource('activities', ActivityController::class);
     Route::apiResource('labels', LabelController::class);

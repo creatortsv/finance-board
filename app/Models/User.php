@@ -67,4 +67,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Activity::class, 'owner_id');
     }
+
+    /**
+     * @return HasMany
+     */
+    public function labels(): HasMany
+    {
+        return $this->hasMany(Label::class, 'owner_id');
+    }
 }

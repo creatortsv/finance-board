@@ -80,7 +80,8 @@ class ExpenseTest extends TestCase
             ->json(Request::METHOD_POST, self::API_URL, [])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
-                'quantity'
+                'date',
+                'quantity',
             ]);
 
         $this
@@ -94,9 +95,10 @@ class ExpenseTest extends TestCase
             ])
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors([
-                'date' => [],
-                'activity_id' => [],
-                'labels' => [],
+                'date' => 'The date is not a valid date.',
+                'activity_id' => 'The selected activity id is invalid.',
+                'labels.0' => 'The selected labels.0 is invalid.',
+                'labels.1' => 'The selected labels.1 is invalid.',
             ])
             ->assertJsonMissingValidationErrors([
                 'quantity',
@@ -106,7 +108,7 @@ class ExpenseTest extends TestCase
         /** Create */
             ->actingAs(...$guard)
             ->json(Request::METHOD_POST, self::API_URL, [
-                'date' => '1 may',
+                'date' => '2020-10-01',
                 'quantity' => 3400,
                 'labels' => $user
                     ->labels()
@@ -116,7 +118,7 @@ class ExpenseTest extends TestCase
                     ->first()
                     ->id,
             ])
-            ->assertOk();
+            ->assertStatus(Response::HTTP_CREATED);
     }
 
     /**
@@ -133,6 +135,7 @@ class ExpenseTest extends TestCase
         $some = User::factory()->create();
 
         $this->assertNotEmpty($user);
+        $this->assertCount(1, Expense::all());
         $this
         /** Unauthorized */
             ->json(...($args = [Request::METHOD_DELETE, self::API_URL . '/' . $expense->id]))
@@ -150,5 +153,7 @@ class ExpenseTest extends TestCase
             ->json(...$args)
             ->assertOk()
             ->assertJson(['message' => 'Expense deleted']);
+
+        $this->assertCount(0, Expense::all());
     }
 }
