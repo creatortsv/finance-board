@@ -18,6 +18,7 @@ class LabelResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'owner' => new UserResource($this->whenLoaded('owner')),
+            'owner_id' => $this->owner_id,
         ];
     }
 }

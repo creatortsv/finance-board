@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseRepository extends RepositoryAbstract implements RepositoryInterface
 {
@@ -40,9 +41,11 @@ class ExpenseRepository extends RepositoryAbstract implements RepositoryInterfac
             $data = array_merge($request->validated(), ['user_id' => $this->user()->id]);
         }
 
-        $model->labels()->sync($data['labels']);
-        $model->fill(Arr::except($data, 'labels'));
-        $model->save();
+        DB::transaction(function () use ($data, &$model): void {
+            $model->labels()->sync($data['labels'] ?? []);
+            $model->fill(Arr::except($data, 'labels'));
+            $model->save();
+        });
 
         return $model;
     }

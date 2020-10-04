@@ -30,7 +30,7 @@ class LabelController extends RepositoryController
     {
         return new LabelResource($this
             ->repository
-            ->save($request));
+            ->save($request, new Label));
     }
 
     /**
@@ -39,11 +39,11 @@ class LabelController extends RepositoryController
      * @param  Label  $activity
      * @return LabelResource
      */
-    public function show(Label $activity): LabelResource
+    public function show(Label $label): LabelResource
     {
         return new LabelResource($this
             ->repository
-            ->find($activity->id));
+            ->find($label->id));
     }
 
     /**
@@ -53,11 +53,11 @@ class LabelController extends RepositoryController
      * @param  Label  $activity
      * @return LabelResource
      */
-    public function update(LabelRequest $request, Label $activity): LabelResource
+    public function update(LabelRequest $request, Label $label): LabelResource
     {
         return new LabelResource($this
             ->repository
-            ->save($request, $activity));
+            ->save($request, $label));
     }
 
     /**
@@ -66,11 +66,11 @@ class LabelController extends RepositoryController
      * @param  Label  $expense
      * @return JsonResponse
      */
-    public function destroy(Label $activity): JsonResponse
+    public function destroy(Label $label): JsonResponse
     {
         $this
             ->repository
-            ->delete($activity->id);
+            ->delete($label->id);
 
         return response()->json(['message' => 'Label deleted']);
     }

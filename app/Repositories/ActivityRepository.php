@@ -2,12 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ActivityRequest;
-use App\Models\Activity;
-use Creatortsv\EloquentPipelinesModifier\ModifierFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Http\FormRequest;
 
 class ActivityRepository extends RepositoryAbstract implements RepositoryInterface
 {
@@ -20,26 +15,5 @@ class ActivityRepository extends RepositoryAbstract implements RepositoryInterfa
             ->user()
             ->activities()
             ->getQuery();
-    }
-
-    /**
-     * @param ActivityRequest $request
-     * @param Activity $model
-     * @return Activity
-     */
-    public function save(FormRequest $request, Model $model = null): Model
-    {
-        $model = $model ?? new Activity;
-        if ($model->exists) {
-            $model = ModifierFactory::modifyTo($this
-                ->builder())
-                ->findOrFail($model->id);
-        } else {
-            $data = array_merge($request->validated(), ['owner_id' => $this->user()->id]);
-        }
-
-        $model->fill($data);
-        $model->save();
-        return $model;
     }
 }

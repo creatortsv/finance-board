@@ -7,6 +7,7 @@ use Creatortsv\EloquentPipelinesModifier\ModifierFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Http\FormRequest;
 
 abstract class RepositoryAbstract
 {
@@ -55,5 +56,30 @@ abstract class RepositoryAbstract
             ->builder())
             ->findOrFail($id)
             ->delete();
+    }
+
+    /**
+     * @param FormRequest $request
+     * @param Model $model
+     * @return Model
+     */
+    public function save(FormRequest $request, Model $model = null): Model
+    {
+        $data = $request->validated();
+        $class = get_class($model ?: new Model);
+        $model = $model ?? new $class;
+        if ($model->exists) {
+            $model = ModifierFactory::modifyTo($this
+                ->builder())
+                ->findOrFail($model->id);
+        } else {
+            $data = array_merge($data, ['owner_id' => $this
+                ->user()
+                ->id]);
+        }
+
+        $model->fill($data);
+        $model->save();
+        return $model;
     }
 }

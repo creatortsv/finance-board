@@ -11,6 +11,11 @@ class Label extends Model
     use HasFactory;
 
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
