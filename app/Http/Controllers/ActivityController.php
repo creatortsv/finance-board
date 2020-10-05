@@ -30,7 +30,7 @@ class ActivityController extends RepositoryController
     {
         return new ActivityResource($this
             ->repository
-            ->save($request, new Activity));
+            ->save($request));
     }
 
     /**

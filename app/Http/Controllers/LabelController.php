@@ -30,7 +30,7 @@ class LabelController extends RepositoryController
     {
         return new LabelResource($this
             ->repository
-            ->save($request, new Label));
+            ->save($request));
     }
 
     /**

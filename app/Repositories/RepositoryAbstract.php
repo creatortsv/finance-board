@@ -12,6 +12,16 @@ use Illuminate\Foundation\Http\FormRequest;
 abstract class RepositoryAbstract
 {
     /**
+     * @var string
+     */
+    protected $modelClass;
+
+    public function __construct(string $class)
+    {
+        $this->modelClass = $class;
+    }
+
+    /**
      * @return Builder
      */
     abstract public function builder(): Builder;
@@ -65,17 +75,13 @@ abstract class RepositoryAbstract
      */
     public function save(FormRequest $request, Model $model = null): Model
     {
-        $data = $request->validated();
-        $class = get_class($model ?: new Model);
-        $model = $model ?? new $class;
+        $user = $this->user();
+        $data = array_merge($request->validated(), ['owner_id' => $user->id]);
+        $model = $model ?: new $this->modelClass;
         if ($model->exists) {
             $model = ModifierFactory::modifyTo($this
                 ->builder())
                 ->findOrFail($model->id);
-        } else {
-            $data = array_merge($data, ['owner_id' => $this
-                ->user()
-                ->id]);
         }
 
         $model->fill($data);

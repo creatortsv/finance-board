@@ -31,15 +31,15 @@ class ExpenseRepository extends RepositoryAbstract implements RepositoryInterfac
      */
     public function save(FormRequest $request, Model $model = null): Model
     {
-        $data = $request->validated();
-        $model = $model ?? new Expense;
+        $model = $model ?: new $this->modelClass;
         if ($model->exists) {
             $model = ModifierFactory::modifyTo($this
                 ->builder())
                 ->findOrFail($model->id);
-        } else {
-            $data = array_merge($request->validated(), ['user_id' => $this->user()->id]);
         }
+
+        $user = $this->user();
+        $data = array_merge($request->validated(), ['user_id' => $user->id]);
 
         DB::transaction(function () use ($data, &$model): void {
             $model->labels()->sync($data['labels'] ?? []);
