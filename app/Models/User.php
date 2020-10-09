@@ -65,6 +65,16 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
+    public function incomes(): HasMany
+    {
+        return $this
+            ->hasMany(Income::class)
+            ->orderByDesc('date');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function activities(): HasMany
     {
         return $this->hasMany(Activity::class, 'owner_id');

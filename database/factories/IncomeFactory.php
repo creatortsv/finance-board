@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Expense;
+use App\Models\Income;
 
-class ExpenseFactory extends ItemFactoryAbstract
+class IncomeFactory extends ItemFactoryAbstract
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Expense::class;
+    protected $model = Income::class;
 }

@@ -53,4 +53,14 @@ class Activity extends Model
             ->hasMany(Expense::class)
             ->orderByDesc('date');
     }
+
+    /**
+     * @return HasMany
+     */
+    public function incomes(): HasMany
+    {
+        return $this
+            ->hasMany(Income::class)
+            ->orderByDesc('date');
+    }
 }

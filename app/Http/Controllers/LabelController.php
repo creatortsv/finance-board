@@ -6,21 +6,9 @@ use App\Http\Requests\LabelRequest;
 use App\Http\Resources\LabelResource;
 use App\Models\Label;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class LabelController extends RepositoryController
 {
-    /**
-     * Display a listing of the resource.
-     * @return AnonymousResourceCollection
-     */
-    public function index(): AnonymousResourceCollection
-    {
-        return LabelResource::collection($this
-            ->repository
-            ->getItems());
-    }
-
     /**
      * Store a newly created resource in storage.
      * @param  LabelRequest $request
@@ -73,5 +61,13 @@ class LabelController extends RepositoryController
             ->delete($label->id);
 
         return response()->json(['message' => 'Label deleted']);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getResource(): string
+    {
+        return LabelResource::class;
     }
 }

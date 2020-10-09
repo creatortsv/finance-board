@@ -4,12 +4,15 @@ namespace App\Providers;
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LabelController;
 use App\Models\Activity;
 use App\Models\Expense;
+use App\Models\Income;
 use App\Models\Label;
 use App\Repositories\ActivityRepository;
 use App\Repositories\ExpenseRepository;
+use App\Repositories\IncomeRepository;
 use App\Repositories\LabelRepository;
 use App\Repositories\RepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +31,13 @@ class AppServiceProvider extends ServiceProvider
             ->needs(RepositoryInterface::class)
             ->give(function (): ExpenseRepository {
                 return new ExpenseRepository(Expense::class);
+            });
+
+        $this->app
+            ->when(IncomeController::class)
+            ->needs(RepositoryInterface::class)
+            ->give(function (): IncomeRepository {
+                return new IncomeRepository(Income::class);
             });
 
         $this->app

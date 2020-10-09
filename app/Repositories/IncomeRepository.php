@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\ExpenseRequest;
+use App\Http\Requests\IncomeRequest;
 use App\Models\Expense;
 use Creatortsv\EloquentPipelinesModifier\ModifierFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +12,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
-class ExpenseRepository extends RepositoryAbstract implements RepositoryInterface
+class IncomeRepository extends RepositoryAbstract implements RepositoryInterface
 {
     /**
      * @return Builder
@@ -20,14 +21,14 @@ class ExpenseRepository extends RepositoryAbstract implements RepositoryInterfac
     {
         return $this
             ->user()
-            ->expenses()
+            ->incomes()
             ->getQuery();
     }
 
     /**
-     * @param ExpenseRequest $request
-     * @param Expense $model
-     * @return Expense
+     * @param IncomeRequest $request
+     * @param Income $model
+     * @return Income
      */
     public function save(FormRequest $request, Model $model = null): Model
     {
@@ -44,6 +45,7 @@ class ExpenseRepository extends RepositoryAbstract implements RepositoryInterfac
         DB::transaction(function () use ($data, &$model): void {
             $model->fill(Arr::except($data, 'labels'));
             $model->save();
+
             $pivot = [];
             foreach ($data['labels'] ?? [] as $id) {
                 $pivot[$id] = ['item_model' => get_class($model)];

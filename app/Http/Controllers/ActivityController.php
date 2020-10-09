@@ -6,21 +6,9 @@ use App\Http\Requests\ActivityRequest;
 use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ActivityController extends RepositoryController
 {
-    /**
-     * Display a listing of the resource.
-     * @return AnonymousResourceCollection
-     */
-    public function index(): AnonymousResourceCollection
-    {
-        return ActivityResource::collection($this
-            ->repository
-            ->getItems());
-    }
-
     /**
      * Store a newly created resource in storage.
      * @param  ActivityRequest $request
@@ -73,5 +61,13 @@ class ActivityController extends RepositoryController
             ->delete($activity->id);
 
         return response()->json(['message' => 'Activity deleted']);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getResource(): string
+    {
+        return ActivityResource::class;
     }
 }

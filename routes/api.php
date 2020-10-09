@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LabelController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->group(function (): void {
     
+    Route::apiResource('incomes', IncomeController::class);
     Route::apiResource('expenses', ExpenseController::class);
     Route::apiResource('activities', ActivityController::class);
     Route::apiResource('labels', LabelController::class);

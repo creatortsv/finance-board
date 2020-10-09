@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\RepositoryInterface;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class RepositoryController extends Controller
+abstract class RepositoryController extends Controller
 {
     /**
      * @var RepositoryInterface
@@ -18,4 +19,21 @@ class RepositoryController extends Controller
     {
         $this->repository = $repository;
     }
+
+    /**
+     * @return AnonymousResourceCollection
+     */
+    public function index(): AnonymousResourceCollection
+    {
+        return static
+            ::getResource()
+            ::collection($this
+                ->repository
+                ->getItems());
+    }
+
+    /**
+     * @return string
+     */
+    abstract public static function getResource(): string;
 }
